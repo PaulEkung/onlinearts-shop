@@ -1,0 +1,325 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap-icons/bootstrap-icons.css' %}">
+    <style type="text/css" media="all">
+*{
+    margin : 0;
+    padding: 0;
+    box-sizing: border-box;
+    font: 15px "Century Gothic", "Times Roman", sans-serif;
+
+}
+.main{
+    margin-left: 320px;
+   width: 900px;
+}
+
+#payments{
+    display: none;
+}
+#orders{
+    display: none;
+}
+#profile{
+    display: none;
+}
+
+</style>
+</head>
+<body>
+    {% include 'header.html' %}
+<br>
+<br>
+<br>
+<br>
+<br>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                 {% include './sidenav.html' %}
+            </div>
+
+            <div class="col-md-8 main">
+                 <div class="container bg-light p-5 rounded-3 position-relative">
+                    <div class="container">
+                        <span class="fw-semibold bi bi-person-circle fs-2 text-black bg-light-subtle p-4 rounded-3"> Hi,  {{ user.firstname }}</span>
+                        <a href="#">
+
+                            <img src="{% static 'images/user.png' %}" width="70px" alt="user" class="float-end rounded-circle">
+                        </a>
+                    </div>
+                    <br>
+                    <br>
+                   
+                    
+                </div>
+                <br>
+                <div class="container" id="customers">
+                    <h3 class="text-secondary fw-bold">Your Arts <a href="{% url 'add_design' %}" class="float-end btn btn-outline-secondary">Add a Design</a> </h3>
+                
+                    {% if arts %}
+                    <br>
+
+                        {% for art in arts %}
+                        <div class="container aos-all shadow p-5 rounded-3" id="transcroller-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <br>
+                                    <br>
+                                    <p class="fs-3 fw-bold text-secondary">{{ art.art_name }}</p>
+                                    <br>
+                                    <p class="fs-4 bg-secondary-subtle p-4">₦{{ art.price }}</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <a href="{{ art.art.url }}">
+
+                                        <img src="{{ art.art.url }}" class="card-img-top rounded-5" alt="Art Image" style="object-fit:cover;">
+                                    </a>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        
+                        
+                                   
+                        {% endfor %}
+
+                    {% else %}
+                    <br>
+                    <p class="bg-warning-subtle p-4">
+                        No Arts or Crafts found for this account!
+                    </p>
+                    {% endif %}
+                </div>
+
+               
+
+                <div class="container" id="payments">
+                    <h3>Payments</h3>
+                    {% if payments %}
+                    
+
+                    <table class="table table-responsive table-responsive-lg table-bordered">
+                        <tr>
+                            <thead>
+                                
+                                <th class="fw-bold">Art Name</th>
+                                <th class="fw-bold">Amount</th>
+                                <th class="fw-bold">Buyer</th>
+                                <th class="fw-bold">Payment Proof</th>
+                                <th class="fw-bold">Action</th>
+                                
+                            </thead>
+                        </tr>
+                        {% for payment in payments %}
+                        <tr>
+                            <tbody>
+                                
+                                <td>
+                                    {{ payment.purchase.art.art_name }}
+                                </td>
+                                <td>
+                                  ₦{{ payment.purchase.art.price }} 
+                                    
+                                </td>
+                                <td>
+                                    {{ payment.buyer.firstname }} {{ payment.buyer.lastname }}
+                                    
+                                   
+                                </td>
+                                <td>
+                                    <a href="{{ payment.payment_proof.url }}">
+
+                                        <img src="{{ payment.payment_proof.url }}" class="card-img-top" alt="Art Image" style="object-fit:cover; height:100px;">
+                                    </a>
+                                </td>
+                                <td>
+                                    {% if payment.purchase.payment_status == 'Verified' %}
+                                    <center>
+
+                                        <p class="bi bi-check-circle fs-3"></p>
+                                        <p class="text-success">Payment Confirmed</p>
+                                    </center>
+                                    {% else %}
+                                    <a href="{% url 'confirm_payment' payment.purchase.uuid %}" class="btn btn-warning">Approve</a>
+                                    {% endif %}
+                                </td>
+                                
+                                
+                            </tbody>
+                        </tr>
+                        {% endfor %}
+
+                    </table>
+                    
+                    {% endif %}
+                </div>
+                <div class="container" id="orders">
+                    <h3>Orders</h3>
+                    {% if orders %}
+                    
+
+                    <table class="table table-responsive table-responsive-lg table-bordered">
+                        <tr>
+                            <thead>
+                                
+                                
+                                <th class="fw-bold">Art</th>
+                                <th class="fw-bold">Buyer</th>
+                                <th class="fw-bold">Email</th>
+                                <th class="fw-bold">Phone</th>
+                                <th class="fw-bold">Address</th>
+                                
+                                
+                            </thead>
+                        </tr>
+                        {% for order in orders %}
+                        <tr>
+                            <tbody>
+                                
+                                <td>
+                                    {{ order.art.art_name }}
+                                </td>
+                                <td>
+                                    
+                                    {{ order.buyer.firstname }}  {{ order.buyer.lastname }}
+                                </td>
+                                <td>
+                                    {{ order.buyer.email }}
+                                   
+                                    
+                                </td>
+                                <td>
+                                     
+                                    {{ order.buyer.phone }}
+                                  
+                                </td>
+                                <td>
+                                      {{ order.buyer.address }}
+                                </td>
+                                
+                                
+                                
+                            </tbody>
+                        </tr>
+                        {% endfor %}
+
+                    </table>
+                    {% else %}
+                    
+                        <p class="bg-warning-subtle p-4 rounded-3 lead fw-bold">
+                        No orders available!
+                        
+                    </p>
+                    {% endif %}
+                </div>
+
+                <div class="container p-4 shadow" id="profile">
+                    <div class="card border border-info border-2 p-4">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src="{% static 'images/user.png' %}" width="70px" alt="">
+                                    <br>
+                                    <br>
+                                    <a href="{% url 'artisan_update_profile' user.uuid %}" class="btn btn-secondary bi bi-pencil-square"> Update profile</a>
+                                </div>
+                                <div class="col-md-6">
+        <ul class="nav flex-column bg-light-subtle p-3">
+      <li class="nav-item mb-1 p-1">
+         <h4 class="fw-bold">Username</h4>
+         <p>{{ user.firstname }} {{ user.lastname }}</p>
+      </li>
+      <li class="nav-item mb-0 p-1">
+         <h4 class="fw-bold">Email</h4>
+         <p>{{ user.email }}</p>
+      </li>
+      <li class="nav-item mb-0 p-1">
+         <h4 class="fw-bold">Phone Number</h4>
+         <p>{{ user.phone }}</p>
+      </li>
+      <li class="nav-item mb-0 p-1">
+         <h4 class="fw-bold">Address</h4>
+         <p>{{ user.address }}</p>
+      </li>
+   </ul>
+                                </div>
+                                <div class="col-md-3">
+                                    
+                                    <h3 class="text-secondary fw-bold">Account</h3>
+                                    {% if account %}
+
+                                    <div class="container">
+                                        <p class="bg-light-subtle text-secondary p-3 fs-4 bi bi-bank">
+                                             <b class="float-end text-success fs-4">{{ account.bank }}</b>
+                                        </p>
+                                        <p>
+                                            <b class="fw-bold">Account Number:</b> {{ account.account_number }}
+                                        </p>
+                                        <p>
+                                            <b class="fw-bold">Account Name:</b> {{ account.account_name }}
+                                            <br>
+                                            <br>
+                                            <a href="{% url 'update_account' %}" class="btn btn-warning">Update Account</a>
+                                    </div>
+                                    {% else %}
+                                    <p class="bg-danger-subtle p-3">Payment account not set</p>
+                                    <a href="{% url 'add_account' %}" class="btn btn-dark">Set Account Details</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <br>
+
+
+            </div>
+               
+        </div>
+    </div>
+   
+<script>
+    function openArtsContainer(){
+      document.getElementById('customers').style.display='block';
+      document.getElementById('payment').style.display='none';
+      document.getElementById('orders').style.display='none';
+      document.getElementById('profile').style.display='none';
+      
+    }
+    function openPaymentContainer(){
+        document.getElementById('payments').style.display='block';
+    document.getElementById('customers').style.display='none';
+    document.getElementById('orders').style.display='none';
+      document.getElementById('profile').style.display='none';
+
+    
+    }
+    
+    function openOrdersContainer(){
+    document.getElementById('orders').style.display='block';
+    document.getElementById('customers').style.display='none';
+    document.getElementById('payments').style.display='none';
+      document.getElementById('profile').style.display='none';
+
+    }
+    function openProfileContainer(){
+        document.getElementById('profile').style.display='block';
+    document.getElementById('orders').style.display='none';
+    document.getElementById('customers').style.display='none';
+    document.getElementById('payments').style.display='none';
+    }
+</script>
+    
+</body>
+</html>

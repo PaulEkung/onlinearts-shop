@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap-icons/bootstrap-icons.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'app/aos-master/dist/aos.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/aos-master/css/style.css' %}">
+
+    <style type="text/css" media="all">
+    *{
+        margin : 0;
+        padding : 0;
+        box-sizing : border-box;
+        font: 15px "Century Gothic", "Times Roman";     
+
+    }
+    </style>
+</head>
+<body class="bg-light">
+   
+    <br>
+    <br>
+    <div class="container aos-all" id="transcroller-body">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+
+                <form action="" method="POST" class="shadow-lg p-5 rounded-3 bg-white aos-item" data-aos="fade-up" autocomplete="off" id="register-form">
+                    <h3 class="text-info fw-bolder fs-2">
+                        <img src="{% static 'images/user.png' %}" alt="icon" width="70px">
+                        Create an Account
+                    </h3>
+                        <br>
+                        {% csrf_token %}
+                        {% for message in messages %}
+                        {% if message.tags == 'success' %}
+
+                        <div class="alert alert-{{message.tags}} alert-success text-center alert-dismissible fade show p-4 w-100" role="alert">
+                            {{message}}
+                            
+                         </div>
+                         {% else %}
+                         <div class="alert alert-{{message.tags}} alert-danger text-center alert-dismissible fade show p-4 w-100" role="alert">
+                            {{message}}
+                            
+                         </div>
+                    {% endif %}
+                    {% endfor %}
+                        
+                        <div class="form-floating">
+                            <input type="text" class="form-control is-invalid" id="floatingInputInvalidFirst" placeholder="example@example.com" name="firstname" value="{{ request.POST.firstname|default_if_none:'' }}" required>
+                            <label for="floatingInputInvalid">Provide Firstname</label>
+                        </div>
+                        <br>
+                        <div class="form-floating">
+                            <input type="text" class="form-control is-invalid" id="floatingInputInvalidLast" placeholder="example@example.com" name="lastname" value="{{ request.POST.lastname|default_if_none:'' }}" required>
+                            <label for="floatingInputInvalid">Provide Lastname</label>
+                        </div>
+                        <br>
+                        <div class="form-floating">
+                            <input type="email" class="form-control is-invalid" id="floatingInputInvalidEmail2" placeholder="example@example.com" name="email" value="{{ request.POST.email|default_if_none:'' }}" required>
+                            <label for="floatingInputInvalid">Provide Email Address</label>
+                        </div>
+                        <br>
+                        <div class="form-floating">
+                            <input type="text" class="form-control is-invalid" id="floatingInputInvalidPhone" placeholder="Phone Number" name="phone" value="{{ request.POST.phone|default_if_none:'' }}" required>
+                            <label for="floatingInputInvalid">Phone Number</label>
+                        </div>
+                        <br>
+                        <div class="form-floating">
+                            <div class="mb-3">
+                                <textarea class="form-control is-invalid" id="exampleFormControlTextarea" name="address" placeholder="Home address" rows="4" value="{{ request.POST.address|default_if_none:'' }}" required></textarea>
+                                
+                            </div>
+                            <select class="form-select form-control is-invalid form-control-lg p-3" id="role" aria-label="Default select example" name="role" required>
+                            <option selected disabled>Select Role</option>
+                            <option value="Buyer">Buyer</option>
+                            <option value="Artisan">Artisan</option>
+                            
+                        </select>
+                        <br>
+                       <div class="form-floating">
+                        <input type="password" class="form-control is-invalid" id="floatingInputInvalidPwd1" placeholder="name@example.com" name="password1" required>
+                        <label for="floatingInputInvalid">Provide Password</label>
+                       </div>
+                        <br>
+                       <div class="form-floating">
+                        <input type="password" class="form-control is-invalid" id="floatingInputInvalidPwd2" placeholder="name@example.com" name="password2" required>
+                        <label for="floatingInputInvalid">Confirm Password</label>
+                       </div>
+                        <br>
+                        <button type="submit" class="btn btn-info p-3 w-100">
+                            <span id="spinner" class="spinner-border d-none fs-5 text-center text-dark" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </span>
+                               <span class='d-block fs-5 fw-bold' id='trigger'>Login</span> 
+                            </button>
+                        </form>
+                        <hr>
+                         <p class="float-start offset-0">Already have an account? <a href="{% url 'index' %}">Login</a></p>
+        
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+    </div>
+  
+<script src="{% static 'app/aos-master/dist/aos.js' %}"></script>
+ <script src="{% static 'app/register.js' %}"></script>
+    <script>
+      AOS.init({
+        easing: 'ease-in-out-sine'
+      });
+    </script>
+</body>
+</html>

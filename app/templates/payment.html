@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap-icons/bootstrap-icons.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'app/aos-master/dist/aos.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/aos-master/css/style.css' %}">
+
+    <style type="text/css" media="all">
+    *{
+        margin : 0;
+        padding : 0;
+        box-sizing : border-box;
+        font: 15px "Century Gothic", "Times Roman";     
+
+    }
+    
+    </style>
+
+</head>
+<body class="bg-light">
+<!-- This section below is for form -->
+<br>
+<br>
+
+<br>
+<div class="container aos-all" id="transcroller-body">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+
+            <p>
+                <b>Send the exact amount of ₦{{ cart.art.price }} to the accunt listed below</b>
+                <p class="bg-white p-3 rounded-3">
+                    <i class="bi bi-credit-card fs-4 text-success"></i> <b class="text-secondary fs-4">{{ account.account_number }}</b>
+                    <br>
+                    <i class="bi bi-person-fill fs-4 text-success"></i> <b class="text-secondary fs-4">{{ account.account_name }}</b>
+                    <br>
+                    <i class="bi bi-bank fs-4 text-success"></i> <b class="text-secondary fs-4">{{ account.bank }}</b> 
+
+                    
+                </p>
+
+            </p>
+            
+                <form action="" method="POST" class="shadow-lg p-5 rounded-3 bg-white aos-item" data-aos="fade-up" enctype="multipart/form-data">
+                    <h3 class="text-info fw-bolder fs-2">
+                        <center>
+
+                            <h2 class="bg-success-subtle p-3 rounded-2 text-secondary">Upload Payment Proof</h2>
+                        </center>
+                    
+
+                    </h3>
+                        <br>
+                        {% csrf_token %}
+                        {% for message in messages %}
+                        {% if message.tags == 'success' %}
+
+                        <div class="alert alert-{{message.tags}} alert-success text-center alert-dismissible fade show p-4 w-100" role="alert">
+                            {{message}}
+                            
+                         </div>
+                         {% else %}
+                         <div class="alert alert-{{message.tags}} alert-danger text-center alert-dismissible fade show p-4 w-100" role="alert">
+                            {{message}}
+                            
+                         </div>
+                    {% endif %}
+                    {% endfor %}
+                        
+                        <div class="form-floating">
+                            <input type="file" class="form-control" name="proof" required>
+                            <div id="uploadHelp" class="form-text text-danger">Only jpeg, jpg, and png file types are allowed.</div>
+                            <label for="floatingInputInvalid">Upload file</label>
+                        </div>
+                       <br>
+                       
+                        <button type="submit" class="btn btn-info p-3 w-100">
+                            <span id="spinner" class="spinner-border d-none fs-5 text-center text-dark" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </span>
+                               <span class='d-block fs-5 fw-bold' id='trigger'>Upload</span> 
+                            </button>
+                            
+                        </form>
+                        
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+    </div>
+<br>
+<br>
+    
+<script src="{% static 'app/aos-master/dist/aos.js' %}"></script>
+
+    <script>
+      AOS.init({
+        easing: 'ease-in-out-sine'
+      });
+    </script>
+      <script src="{% static 'app/node_modules/bootstrap/dist/js/bootstrap.bundle.js' %}"></script>
+<script src="{% static 'app/node_modules/bootstrap/dist/js/bootstrap.js' %}"></script>
+<script src="{% static 'app/node_modules/bootstrap/dist/js/bootstrap.min.js' %}"></script> 
+</body>
+</html>

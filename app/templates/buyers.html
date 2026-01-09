@@ -1,0 +1,202 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap-icons/bootstrap-icons.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/aos-master/dist/aos.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/aos-master/css/style.css' %}">
+    <style type="text/css" media="all">
+*{
+    margin : 0;
+    padding: 0;
+    box-sizing: border-box;
+    font: 15px "Century Gothic", "Times Roman", sans-serif;
+
+}
+
+.sidenav{
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 90px;
+    left: 0;
+    background: #fff;
+    overflow-x: hidden;
+    padding-top: 90px;
+    transition: 0.1s;
+
+    }
+
+
+</style>
+</head>
+<body>
+    {% include 'header.html' %}
+    <br>
+    <br>
+    <br>
+    <br>
+   <div class="container bg-light p-5 rounded-3 position-relative aos-all" id="transcroller-body" data-aos="fade-down" data-aos-duration="1000">
+                    <div class="container">
+                        <span class="fw-semibold bi bi-person-circle fs-2 text-black bg-light-subtle p-4 rounded-3"> Hi,  {{ user.firstname }}</span>
+                        
+                        <a href="#" class="offset-2 text-secondary text-decoration-none" onclick="openNav()">Your Cart</a>
+                        <a href="{% url 'logout__' %}" onclick="return confirm('Are you sure you want to logout?')" class="offset-1 btn btn-danger">Logout</a>
+                           
+                        <a href="#">
+
+                            <img src="{% static 'images/user.png' %}" width="70px" alt="user" class="float-end rounded-circle">
+                        </a>
+                    </div>
+                    <br>
+                    <br>
+                </div>
+                <br>
+                <div class="container aos-all" id="transcroller-body">
+                    <div class="row row-cols-1 row-cols-md-3 g-3">
+                        {% for art in arts %}
+                        <div class="col">
+                            <div class="card h-100 shadow-sm aos-item" data-aos-duration="1300" data-aos="fade-up">
+                                
+                                <img src="{{ art.art.url }}" class="card-img-top" alt="Art Image" style="object-fit:cover; height:300px;">
+
+                                <div class="card-footer">
+                                 <p class="text-secondary fs-4 fw-bold">{{ art.art_name }}</p>
+                                 <p class="text-success fs-5"> ₦{{ art.price }}</p> 
+                                 <a href="{% url 'confirm_add_cart' art.uuid %}" class="float-end btn btn-success">Add to Cart</a>
+                                </div>
+                                
+                                
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col">
+                            <div class="alert alert-info">No arts available yet</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <br>
+                    <br>
+                </div>
+
+
+        <div class="container">
+
+        <div id="mySidenav" class="sidenav bg-light">
+            
+        <div class="container">
+
+            <h2 class="text-secondary fs-1">Your Cartalog
+
+                <a href="#" onclick="closeNav()" class="btn-close btn-close bg-danger-subtle p-3 float-end"></a>
+            </h2>
+
+            {% if carts %}
+
+            <table class="table table-bordered table-hover">
+                <tr>
+                    <thead>
+                        <th>Art Image</th>
+                        <th>Art Name</th>
+                        <th>Art Price</th>
+                        <th>Owner</th>
+                        <th>Owner Details</th>
+                        <th>Payment Status</th>
+                    </thead>
+                </tr>
+                {% for cart in carts %}
+
+                <tr>
+                    <tbody>
+                        <td><img src="{{ cart.art.art.url }}" class="card-img-top" alt="Art Image" style="object-fit:cover; height:100px;"></td>
+                        <td>
+                            <p>
+                                {{ cart.art.art_name }}
+                            </p>
+                        </td>
+                        <td>
+                             <p>
+                               ₦ {{ cart.art.price }}
+                            </p>
+                        </td>
+                        <td>
+                            <p>
+                            {{ cart.art.artisan.firstname }} {{ cart.art.artisan.lastname }}
+                            </p> 
+                        </td>
+                        <td>
+                            <p>
+                            -> {{ cart.art.artisan.email }}
+                            <br>
+                            -> {{ cart.art.artisan.phone }}
+                             <br>
+                            -> {{ cart.art.artisan.address }}
+                            </p> 
+                        </td>
+                        <td>
+                            <p>
+                            {% if cart.payment_status == "Not Paid" %}
+                            <br>
+                            <a href="{% url 'payment' cart.uuid %}" class="btn btn-primary">Make Payment</a>
+                            {% elif cart.payment_status == "Paid" %}
+                                <p class="bg-warning-subtle p-3 rounded-2 bi bi-hourglass-bottom"> Pending Review</p>
+                            {% else %}
+                            <center>
+
+                                <p class="bi bi-check-circle-fill text-success fs-3"></p>
+                                <p>Payment Recieved</p>
+                            </center>
+                            {% endif %}
+                            </p> 
+                        </td>
+                    </tbody>
+                </tr>
+
+                {% endfor %}
+
+            </table>
+
+            {% else %}
+            
+            
+            <center>
+            <div class="container">
+                
+                    <p>No cartalog available</p>
+                    
+                </div>
+            </center>
+
+            {% endif %}
+
+        </div>
+
+        
+        
+        </div>
+        </div>
+                
+<script src="{% static 'app/aos-master/dist/aos.js' %}"></script>
+    <script>
+      AOS.init({
+        easing: 'ease-in-out-sine'
+      });
+    </script>   
+    <script type="text/javascript">
+    function openNav(){
+        document.getElementById("mySidenav").style.width ="100%";
+        
+    }
+    function closeNav(){
+        document.getElementById("mySidenav").style.width ="0";
+        
+    }
+    </script> 
+</body>
+</html>

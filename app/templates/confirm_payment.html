@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Cart</title>
+     <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap-icons/bootstrap-icons.css' %}">
+    <style type="text/css" media="all">
+*{
+    margin : 0;
+    padding: 0;
+    box-sizing: border-box;
+    font: 15px "Century Gothic", "Times Roman", sans-serif;
+
+}
+</style>
+</head>
+<body>
+    <br>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="container bg-light-subtle shadow-lg rounded-5">
+                    <br>
+                
+                    <a href="{% url 'artisans' %}" class="float-end btn-close m-3 btn-close-dark"></a>
+                    <form action="" method="post" class="p-5">
+                        
+                        {% csrf_token %}
+                        <h3 class="fw-bold">Confirm Payment</h3>
+                        <p>Are you sure you want to confirm that this transaction has been completed by the buyer and you have received the funds?</p>
+                        <input type="hidden" name="confirmed" value="{{ purchase.uuid }}" id="#">
+
+                        <button type="submit" class="btn btn-success bi bi-check-all">
+
+                            Yes, I confirm
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+    </div>
+    
+</body>
+</html>
